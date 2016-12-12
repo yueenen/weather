@@ -1,0 +1,51 @@
+<!--Created by yueenen on 12/12/16 22:26.-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> 你不会的原因是想的太多，写得太少。</title>
+    <style>
+        table{
+            width: 600px;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+<body>
+    <table></table>
+    <script src="./js/jquery.min.js"></script>
+    <script src="./js/template-native.js"></script>
+    <script>
+        $.ajax({
+            type: "get",
+            url:"http://api.map.baidu.com/telematics/v3/weather",
+            data:{ak:'DarF2LCCGzn6T16zgy8ZPkvYYE5CT6fu',location:'广州',output:'json'},
+            dataType:"jsonp",
+            success:function (data) {
+                //console.log(data);
+                var wd = data.results[0].weather_data;
+                //console.log(wd);
+                var html = template("weather",{result:wd});
+                $("table").html(html);
+                //console.log(html);
+            },
+
+            error:function (data) {
+                console.log(data);
+            }
+        });
+    </script>
+    <script type="text/template" id="weather">
+        <% for(var i = 0; i < result.length; i++){ %>
+            <tr>
+                <td><%= result[i].date %></td>
+                <td><img src="<%= result[i].dayPictureUrl %>" alt=""></td>
+                <td><img src="<%= result[i].nightPictureUrl %>" alt=""></td>
+                <td><%= result[i].temperature %></td>
+                <td><%= result[i].weather %></td>
+                <td><%= result[i].wind %></td>
+            </tr>
+        <% } %>
+    </script>
+</body>
+</html>
